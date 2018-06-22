@@ -29,8 +29,6 @@ func NewCache() (cache *Cache, err error) {
 		return cache, fmt.Errorf("failed to connect to redis, %s", err)
 	}
 
-	rClient.FlushAll()
-
 	log.Printf("Ping Redis %s", pong)
 
 	return &Cache{
