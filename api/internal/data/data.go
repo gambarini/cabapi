@@ -42,7 +42,7 @@ func NewDb() (data *Db, err error) {
 
 	c, err := cache.NewCache()
 	if err != nil {
-		return data, fmt.Errorf("Failed to get cache connection, %s", err)
+		return data, fmt.Errorf("failed to get cache connection, %s", err)
 	}
 
 	return &Db{
