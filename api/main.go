@@ -1,15 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"log"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
-	"github.com/gambarini/cabapi/api/internal/svc"
 	"github.com/gambarini/cabapi/api/internal/data"
+	"github.com/gambarini/cabapi/api/internal/server"
 )
-
-
 
 func main() {
 
@@ -21,22 +16,13 @@ func main() {
 
 	defer db.Close()
 
-	r := mux.NewRouter()
-
-	svc.HandleTrips(r, db)
-
-	http.Handle("/", r)
+	srv := server.NewServer(":8000", db)
 
 	log.Println("Listening on port 8000. Ctrl+C to stop")
-	err = http.ListenAndServe(":8000", nil)
+	err = srv.ListenAndServe()
 
 	if err != nil {
 		log.Fatalf("Failed to start server, %s", err)
 	}
 
 }
-
-
-
-
-

@@ -1,4 +1,4 @@
-package svc
+package server
 
 import (
 	"log"
@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 	"github.com/gorilla/mux"
-	"github.com/gambarini/cabapi/api/internal/data"
 	"errors"
 	"strings"
 )
@@ -14,18 +13,15 @@ import (
 var (
 	ErrNotPickupDate     = errors.New("no pickup date found")
 	ErrInvalidPickupDate = errors.New("invalid pickup date. Expected date=YYYY-MM-DD")
-	Db *data.Db
 )
 
-func HandleTrips(r *mux.Router, db *data.Db) {
+func HandleTrips(r *mux.Router, srv *Server) {
 
-	Db = db
-
-	r.HandleFunc("/trip/{date}", getTrips)
+	r.HandleFunc("/trip/{date}", srv.getTrips)
 
 }
 
-func getTrips(writer http.ResponseWriter, request *http.Request) {
+func (server *Server) getTrips(writer http.ResponseWriter, request *http.Request) {
 
 	vars := mux.Vars(request)
 	strDate := vars["date"]
@@ -48,7 +44,7 @@ func getTrips(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	trips, err := Db.FindTrips(date, medallions, resolveUseCache(request))
+	trips, err := server.Db.FindTrips(date, medallions, resolveUseCache(request))
 
 	if err != nil {
 		log.Println(err)

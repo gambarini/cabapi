@@ -8,6 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/gambarini/cabapi/api/internal/cache"
 	"github.com/gambarini/cabapi/api/internal/model"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
