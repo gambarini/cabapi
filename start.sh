@@ -11,7 +11,7 @@ echo "starting mysql..."
 docker run -p 3306:3306 --name mysql_cabapi -v ~/tmp_mysql_data_cabapi:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root -d mysql:5.7.22
 
 echo "waiting mysql and redis server before continuing (about a minute)..."
-sleep 60s
+sleep 30s
 
 mysql -hlocalhost -P3306 --protocol=tcp -uroot -proot -e "create database cabapi";
 
@@ -28,5 +28,6 @@ docker stop mysql_cabapi
 
 rm -rf ~/tmp_mysql_data_cabapi
 
+echo "removing containers"
 docker rm redis_cabapi
 docker rm mysql_cabapi
