@@ -35,14 +35,7 @@ func (server *Server) getTrips(writer http.ResponseWriter, request *http.Request
 		return
 	}
 
-	medallions, err := resolveMedallions(request)
-
-	if err == ErrInvalidPickupDate {
-		log.Println(err)
-		writer.WriteHeader(400)
-		writer.Write([]byte(err.Error()))
-		return
-	}
+	medallions := resolveMedallions(request)
 
 	trips, err := server.Db.FindTrips(date, medallions, resolveUseCache(request))
 
@@ -85,21 +78,21 @@ func resolvePickupDate(dateStr string) (date time.Time, err error) {
 	return date, nil
 }
 
-func resolveMedallions(request *http.Request) (medallions []string, err error) {
+func resolveMedallions(request *http.Request) (medallions []string) {
 
 	medlStr := request.URL.Query().Get("medallion")
 
 	log.Printf("Medallion Param %s", medlStr)
 
 	if medlStr == "" {
-		return medallions, nil
+		return medallions
 	}
 
 	medallions = strings.Split(medlStr, ",")
 
 	log.Printf("medallions: %v", medallions)
 
-	return medallions, nil
+	return medallions
 }
 
 func resolveUseCache(request *http.Request) (useCache bool) {

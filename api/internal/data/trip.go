@@ -103,6 +103,8 @@ func (db *Db) FindTrips(date time.Time, medallions []string, useCache bool) (tri
 
 func (db *Db) fetchCache(date time.Time, medallions []string) (trips []model.Trips, toDb []string) {
 
+	trips = make([]model.Trips, 0)
+
 	for _, medl := range medallions {
 
 		trip, err := db.cache.Get(medl, date)
